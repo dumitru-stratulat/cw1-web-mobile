@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://unpkg.com/vue@2.7.8/dist/vue.js"></script>
+    <title>Document</title>
+</head>
+
+<body>
+
+    <div id="app">
+        <!-- The <div> ID will be used to link to the Vue.js code -->
+        <h1>My Todo List</h1>
+        <form> ... </form>
+        <p>{{product.subject}}</p>
+        <p>{{product.price}}</p>
+        <p>{{product.spaces}}</p>
+        <p>{{product.location}}</p>
+        <button v-on:click="buy">Buy</button>
+    </div>
+    <script>
+        let app = new Vue({ // the root Vue instance
+            el: '#app', // this links to the <div> with the ID #app
+            data: {
+                product: {
+                    id: 1001, 
+                    subject: "Math", 
+                    price: "100",
+                    spaces:5,
+                    location:"London"
+                                }
+            },
+            methods: {
+            buy() {
+                if(this.product.spaces>0){
+                    this.product.spaces--;
+                }
+            }
+            }
+
+        })
+    </script>
+
+</body>
+
+</html>
