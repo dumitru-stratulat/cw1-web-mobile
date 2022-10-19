@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+<head>
+    <script src="https://unpkg.com/vue@2.7.8/dist/vue.js"></script>
+    <title>XtraCurricular Zone</title>
+    <link rel="stylesheet" type="text/css"
+        href="https://cdnjs.cloudflare.com/ajax/libs/fontawesome/5.15.1/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
+</head>
+
+<body>
+
+
+    <div id="app">
+        <div id="top-nav-left">
+            <a href="cw.html">XtraCurricular Zone</a>
+        </div>
+        <div id="top-nav-right">
+            <a>Maths Revision</a>
+            <a>TableTennis</a>
+            <a>Football</a>
+            <button>
+            Basket({{cartItemCount}})
+            <!-- 'cartItemCount' is used the same way as a data property. -->
+            </button>
+        </div>
+        <div id="main"></div>
+        <div id="top-nav-center"></div>
+        <!-- The <div> ID will be used to link to the Vue.js code -->
+        <h1>Activities</h1>
+        <p>{{product.subject}}</p>
+        <p>{{product.location}}</p>
+        <p>Price: £{{product.price}}</p>
+        <p>Spaces Left: {{product.spaces}}</p>
+        <button v-on:click="buy()">Buy</button>
+    </div>
+
+    <script>
+        let app = new Vue({ // the root Vue instance
+            el: '#app', // this links to the <div> with the ID #app
+            data: {
+                product: {
+
+                    id: 1001,
+                    subject: "Maths",
+                    price: 100,
+                    spaces: 5,
+                    location: "London"
+
+                },
+                cart: []
+            },
+
+            computed: { // the Computed Property object
+                cartItemCount: function () { // the property name
+                    // its value is calculated when it is called
+                    return this.cart.length || "0";
+                }
+
+            },
+
+            methods: {
+                buy() {
+                    if (this.product.spaces > 0) {
+                        this.product.spaces--;
+
+                    }
+                    this.cart.push(this.product.id);
+                },
+
+
+            },
+
+
+        })
+    </script>
+</body>
+
+</html>
