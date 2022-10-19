@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <script src="https://unpkg.com/vue@2.7.8/dist/vue.js"></script>
+    <link rel="stylesheet" type="text/css" href="./style.css">
     <title>Document</title>
 </head>
 
@@ -14,12 +15,13 @@
     <div id="app">
         <!-- The <div> ID will be used to link to the Vue.js code -->
         <h1>My Todo List</h1>
-        <form> ... </form>
-        <p>{{product.subject}}</p>
-        <p>{{product.price}}</p>
-        <p>{{product.spaces}}</p>
-        <p>{{product.location}}</p>
-        <button v-on:click="buy">Buy</button>
+        <div class="cart">
+            <p>Subject:{{product.subject}}</p>
+            <p>Price:{{product.price}}</p>
+            <p>Spaces:{{product.spaces}}</p>
+            <p>Location:{{product.location}}</p>
+            <button v-on:click="buy">Add to cart</button>
+        </div>
     </div>
     <script>
         let app = new Vue({ // the root Vue instance
