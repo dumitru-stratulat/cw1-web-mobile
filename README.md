@@ -1,1 +1,1 @@
-New github pages:
+New github pages:http://dumitru-stratulat.github.fo/
