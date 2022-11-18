@@ -8,6 +8,7 @@
     <script src="https://unpkg.com/vue@2.7.8/dist/vue.js"></script>
     <link rel="stylesheet" type="text/css" href="./style.css">
     <title>Document</title>
+
 </head>
 
 <body>
@@ -17,212 +18,80 @@
         <button v-on:click="sortAlphabetical">Sort:By Subject</button>
         <button v-on:click="sortByCity">Sort:By Location</button>
         <button v-on:click="sortNumerical">Sort:By price</button>
-        <button v-bind:disabled="this.countsLessonSpacesInCart() == 0">
-            {{this.countsLessonSpacesInCart()}}Cart
-        </button>
 
-        <div v-for="product in products" :key="Math.floor(Math.random() * 1000)*Date.now()">
-            <div class="cart">
-                <p>Subject:{{product.subject}}</p>
-                <p>Price:{{product.price}}</p>
-                <p>Spaces:{{product.spaces}}</p>
-                <p>Location:{{product.location}}</p>
-                <button v-on:click="buy(product)" v-bind:disabled="product.spaces == 0">Add to cart</button>
+        <div v-if='goToCheckoutPage == false'>
+            <button @click="goToCheckoutPage = !goToCheckoutPage"
+                v-bind:disabled="this.countsLessonSpacesInCart() == 0">
+                Cart
+            </button>
+            <div class="inputContainer">
+                <input type="search" id="search" name="search" onkeypress="this.search()" @keyup="search()">
+                <button v-on:click="search()">Search</button>
+            </div>
+            <div class="cardContainer">
+                <div v-for="product in searchList" :key="Math.floor(Math.random() * 1000)*Date.now()">
+                    <div class="cart">
+                        <p>Subject:{{product.subject}}</p>
+                        <p>Price:{{product.price}}</p>
+                        <p>Spaces:{{product.spaces}}</p>
+                        <p>Location:{{product.location}}</p>
+                        <img class="icon"  v-bind:src="iconSrc" style="width:50px;height:50px" />
+                        <button v-on:click="buy(product)" v-bind:disabled="product.spaces == 0">Add to cart</button>
+                    </div>
+                </div>
+            </div>
+            <h1>Lessons shop</h1>
+            <div class="cardContainer">
+                <div v-for="product in products" :key="Math.floor(Math.random() * 1000)*Date.now()">
+                    <div class="cart">
+                        <p>Subject:{{product.subject}}</p>
+                        <p>Price:{{product.price}}</p>
+                        <p>Spaces:{{product.spaces}}</p>
+                        <p>Location:{{product.location}}</p>
+                        <img class="icon"  v-bind:src="iconSrc" style="width:50px;height:50px" />
+                        <button v-on:click="buy(product)" v-bind:disabled="product.spaces == 0">Add to cart</button>
+                    </div>
+                </div>
             </div>
         </div>
-        <h3>Cart:</h3>
-        <div v-for="product in cart" :key="Math.floor(Math.random() * 1000)*Date.now()">
-            <div class="cart">
-                <p>Subject:{{product.subject}}</p>
-                <p>Price:{{product.price}}</p>
-                <p>Spaces:{{product.spaces}}</p>
-                <p>Location:{{product.location}}</p>
-                <button v-on:click="removeFromCart(product)" v-bind:disabled="product.spaces == 0">Remove from
-                    cart</button>
+        <div v-else>
+            <button @click="goToCheckoutPage = !goToCheckoutPage"
+                v-bind:disabled="this.countsLessonSpacesInCart() == 0">
+                Shop
+            </button>
+            <h1>Cart:</h1>
+            <div class="cardContainer">
+                <div v-for="product in cart" :key="Math.floor(Math.random() * 1000)*Date.now()">
+                    <div class="cart" v-if='product.spaces > 0'>
+                        <p>Subject:{{product.subject}}</p>
+                        <p>Price:{{product.price}}</p>
+                        <p>Spaces:{{product.spaces}}</p>
+                        <p>Location:{{product.location}}</p>
+                        <img class="icon"  v-bind:src="iconSrc" style="width:50px;height:50px" />
+                        <button v-on:click="removeFromCart(product)" v-bind:disabled="product.spaces == 0">Remove from
+                            cart</button>
+                    </div>
+                </div>
             </div>
-        </div>
-        <input type="search" id="search" name="search" onkeypress="this.search()" @keyup="search()">
-        <button v-on:click="search()">Search</button>
-        <div v-for="product in searchList" :key="Math.floor(Math.random() * 1000)*Date.now()">
-            <div class="cart">
-                <p>Subject:{{product.subject}}</p>
-                <p>Price:{{product.price}}</p>
-                <p>Spaces:{{product.spaces}}</p>
-                <p>Location:{{product.location}}</p>
-                <!-- <button v-on:click="removeFromCart(product)" v-bind:disabled="product.spaces == 0">Remove from
-                    cart</button> -->
+            <h1>Checkout</h1>
+            <div class="inputContainer">
+                <input type="text" placeholder="Enter name" v-model="customerName" />
+
+                <input v-model="customerPhone" type="number" pattern=".{10,10}" class="input_fields" required
+                    placeholder="Phone number (+91)" />
+                <button v-on:click="outpuMessageHandler('Checkout has been submitted')"
+                    v-bind:disabled="customerName.length<2 || customerPhone.toString().length<6">
+                    Checkout
+                </button>
             </div>
+            <p>{{outputMessage}}</p>
+
         </div>
     </div>
-    <script>
-        let app = new Vue({ // the root Vue instance
-            el: '#app', // this links to the <div> with the ID #app
-            data: {
-                products: [
-                    {
-                        id: 1001,
-                        subject: "Math",
-                        price: "100",
-                        spaces: 5,
-                        location: "London"
-                    },
-                    {
-                        id: 1005,
-                        subject: "English",
-                        price: "95",
-                        spaces: 5,
-                        location: "Wellington"
-                    },
-                    {
-                        id: 1002,
-                        subject: "English",
-                        price: "93",
-                        spaces: 5,
-                        location: "London"
-                    },
-                    {
-                        id: 1003,
-                        subject: "Music",
-                        price: "105",
-                        spaces: 5,
-                        location: "London"
-                    },
-                    {
-                        id: 1004,
-                        subject: "English",
-                        price: "95",
-                        spaces: 5,
-                        location: "York"
-                    },
-                ],
-                cart: [
-                    {
-                        id: 1001,
-                        subject: "Math",
-                        price: "100",
-                        spaces: 0,
-                        location: "London"
-                    },
-                    {
-                        id: 1005,
-                        subject: "English",
-                        price: "95",
-                        spaces: 0,
-                        location: "Wellington"
-                    },
-                    {
-                        id: 1002,
-                        subject: "English",
-                        price: "93",
-                        spaces: 0,
-                        location: "London"
-                    },
-                    {
-                        id: 1003,
-                        subject: "Music",
-                        price: "105",
-                        spaces: 0,
-                        location: "London"
-                    },
-                    {
-                        id: 1004,
-                        subject: "English",
-                        price: "95",
-                        spaces: 0,
-                        location: "York"
-                    },
-                ],
-                searchList: []
-            },
-            methods: {
-                buy(product) {
-                    this.removeSpace(this.products, product.id);
-                    this.addSpace(this.cart, product.id)
-                },
-                removeFromCart(product) {
-                    this.removeSpace(this.cart, product.id);
-                    this.addSpace(this.products, product.id)
-                },
-                removeSpace(listOfProducts, productId) {
-                    for (let i = 0; i < listOfProducts.length; i++) {
-                        if (listOfProducts[i].id === productId && listOfProducts[i].spaces > 0) {
-                            listOfProducts[i].spaces--;
-                        }
-                    }
-                },
-                addSpace(listOfProducts, productId) {
-                    for (let i = 0; i < listOfProducts.length; i++) {
-                        if (listOfProducts[i].id === productId && listOfProducts[i].spaces <= 5) {
-                            listOfProducts[i].spaces++;
-                        }
-                    }
-                },
-                countsLessonSpacesInCart() {
-                    let lessonsCounter = 0;
-                    for (let i = 0; i < this.cart.length; i++) {
-                        if (this.cart[i].spaces > 0) {
-                            lessonsCounter++;
-                        }
-                    }
-                    return lessonsCounter;
-                },
-                search() {
-                    this.searchList = [];
-                    let searchString = document.getElementById("search").value;
-                    for (let i = 0; i < this.products.length; i++) {
-                        if (
-                            (this.products[i].subject.toUpperCase().includes(searchString.toUpperCase()) ||
-                            this.products[i].location.toUpperCase().includes(searchString.toUpperCase())&&
-                            searchString.length>0
-                            )) 
-                            {
-                                this.searchList.push(this.products[i])
-                            }
-                    }
-                    if(searchString.length==0){
-                        this.searchList=[];
-                    }
-                },
-
-                compareAlphabetical(a, b) {
-                    // Use toUpperCase() to ignore character casing
-                    const subjectA = a.subject.toUpperCase();
-                    const subjectB = b.subject.toUpperCase();
-
-                    let comparison = 0;
-                    if (subjectA > subjectB) {
-                        comparison = 1;
-                    } else if (subjectA < subjectB) {
-                        comparison = -1;
-                    }
-                    return comparison;
-                },
-                compareByCity(a, b) {
-                    // Use toUpperCase() to ignore character casing
-                    const subjectA = a.location.toUpperCase();
-                    const subjectB = b.location.toUpperCase();
-
-                    let comparison = 0;
-                    if (subjectA > subjectB) {
-                        comparison = 1;
-                    } else if (subjectA < subjectB) {
-                        comparison = -1;
-                    }
-                    return comparison;
-                },
-                sortAlphabetical() {
-                    this.products.sort(this.compareAlphabetical);
-                },
-                sortByCity() {
-                    this.products.sort(this.compareByCity);
-                },
-                sortNumerical() {
-                    this.products.sort((a, b) => a.price - b.price);
-                }
-            }
-
-        })
-    </script>
+    </div>
+    <script src="products.js"></script>
+    <script src="cart.js"></script>
+    <script type="text/javascript" src="vueInstance.js"></script>
 </body>
 
 </html>

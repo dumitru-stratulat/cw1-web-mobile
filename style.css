@@ -2,7 +2,6 @@
     width: 300px;
     border: 1px solid black;
     border-radius: 50px;
-    
 }
 .cart>p{
     margin-top: 3px;
@@ -15,4 +14,25 @@ button{
     background-color: rgb(68, 138, 199);
     color: white;
     border-radius: 5px;
+}
+.cardContainer{
+    display: flex;
+    flex-wrap: wrap;
+}
+input{
+    padding: 10px;
+    margin-left: 20px;
+}
+.inputContainer{
+    display: flex;
+}
+.inputContainer > button{
+    padding: 10px;
+}
+#search{
+    width: 500px;
+    padding: 5px;
+}
+.icon{
+    margin-left: 50px;
 }
