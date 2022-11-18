@@ -1,2 +1,2 @@
 New github pages:
-DNS check github pages:
+DNS check in progress
